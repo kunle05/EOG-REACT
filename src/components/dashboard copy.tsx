@@ -1,8 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { Provider, createClient, useQuery } from 'urql';
-import Select from 'react-select';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import FormControl from '@material-ui/core/FormControl';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 const client = createClient({
     url: 'https://react.eogresources.com/graphql',
@@ -16,16 +17,19 @@ const METRICS_QUERY = `
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    dropDown: {
-      margin: theme.spacing(2),
-      maxWidth: 500,
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 200,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
     },
   }),
 );
 
 const initialState = {
     metrics: [],
-    values: [],
+    value: '',
 };
  
 function reducer(state: any, action: any) {
@@ -46,9 +50,9 @@ export default () => {
 const Dashboard = () => {
     const classes = useStyles();
     const [state, dispatch] = useReducer(reducer, initialState);
-    const handleChange = (e: any) => dispatch({
-        type: 'values',
-        payload: e,
+    const handleChange = (e: React.ChangeEvent<{ value: unknown }>) => dispatch({
+        type: 'value',
+        payload: e.target.value,
     })
 
     const [{ fetching, data, error }] = useQuery({ query: METRICS_QUERY });
@@ -61,14 +65,10 @@ const Dashboard = () => {
             return;
         }
         if (!data) return;
-        const options = data.getMetrics.map((metric: string) => ({
-            'value': metric,
-            'label': metric
-        }));
-
+        const { getMetrics } = data;
         dispatch({
             type: 'metrics',
-            payload: options
+            payload: getMetrics
         })
     }, [dispatch, data, error])
 
@@ -76,13 +76,22 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Select
-                isMulti
-                placeholder='Select metric...'
-                options={state.metrics}
-                onChange={handleChange}
-                className={classes.dropDown}
-            />
+            <FormControl className={classes.formControl}>
+                <NativeSelect
+                    className={classes.selectEmpty}
+                    value = {state.value}
+                    name='metric'
+                    onChange = {handleChange}
+                    inputProps={{'aria-label': 'metric'}}
+                >
+                    <option value='' disabled>Select metric..</option>
+                    { state.metrics.map(metric) }
+                </NativeSelect>
+            </FormControl>
         </div>
     );
 };
+
+const metric = (metric: string) => (
+    <option key={metric} value={metric}>{ metric }</option>
+)
