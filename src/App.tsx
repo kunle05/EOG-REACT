@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
 import NowWhat from './components/NowWhat';
+import { Router, RouteComponentProps } from '@reach/router';
+import Dashboard from './components/dashboard';
 
 const store = createStore();
 const theme = createMuiTheme({
@@ -30,7 +32,10 @@ const App = () => (
     <Provider store={store}>
       <Wrapper>
         <Header />
-        <NowWhat />
+        <Router>
+          <RouterPage path='/' pageComponent={ <NowWhat /> } />
+          <RouterPage path='/dashboard' pageComponent={ <Dashboard /> } />
+        </Router>
         <ToastContainer />
       </Wrapper>
     </Provider>
@@ -38,3 +43,7 @@ const App = () => (
 );
 
 export default App;
+
+const RouterPage = (
+  props: { pageComponent: JSX.Element } & RouteComponentProps
+) => props.pageComponent;

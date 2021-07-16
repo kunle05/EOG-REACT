@@ -62,7 +62,7 @@ const Weather = () => {
     }
     if (!data) return;
     const { getWeatherForLocation } = data;
-    dispatch(actions.weatherDataRecevied(getWeatherForLocation));
+    dispatch(actions.weatherDataReceived(getWeatherForLocation));
   }, [dispatch, data, error]);
 
   if (fetching) return <LinearProgress />;

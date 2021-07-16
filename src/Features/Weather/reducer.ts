@@ -23,7 +23,7 @@ const slice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
-    weatherDataRecevied: (state, action: PayloadAction<WeatherForLocation>) => {
+    weatherDataReceived: (state, action: PayloadAction<WeatherForLocation>) => {
       const { description, locationName, temperatureinCelsius } = action.payload;
       state.temperatureinCelsius = temperatureinCelsius;
       state.temperatureinFahrenheit = toF(temperatureinCelsius);
