@@ -7,7 +7,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Chip from '../../components/Chip';
 import { IState } from '../../store';
 
-const client = createClient({
+export const client = createClient({
   url: 'https://react.eogresources.com/graphql',
 });
 

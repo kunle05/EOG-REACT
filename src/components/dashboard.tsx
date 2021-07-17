@@ -1,12 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
-import { Provider, createClient, useQuery } from 'urql';
+import { Provider, useQuery } from 'urql';
 import Select from 'react-select';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
-const client = createClient({
-    url: 'https://react.eogresources.com/graphql',
-});
+import { client } from '../Features/Weather/Weather';
+import Chart from './chart';
 
 const METRICS_QUERY = `
     query {
@@ -28,7 +26,7 @@ const initialState = {
     values: [],
 };
  
-function reducer(state: any, action: any) {
+export function reducer(state: any, action: any) {
     return {
         ...state,
         [action.type]: action.payload
@@ -41,7 +39,7 @@ export default () => {
         <Dashboard />
       </Provider>
     );
-  };
+};
 
 const Dashboard = () => {
     const classes = useStyles();
@@ -76,13 +74,16 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Select
-                isMulti
-                placeholder='Select metric...'
-                options={state.metrics}
-                onChange={handleChange}
-                className={classes.dropDown}
-            />
+            <div style={{ width: '75%', margin: 'auto' }}>
+                <Select
+                    isMulti
+                    placeholder='Select metric...'
+                    options={state.metrics}
+                    onChange={handleChange}
+                    className={classes.dropDown}
+                />
+            </div>
+            { state.values.length > 0 && <Chart values={state.values} /> }
         </div>
     );
 };
