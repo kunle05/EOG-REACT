@@ -117,12 +117,29 @@ const Chart = (props: MetricProps) => {
                         bottom: 5,
                     }}
                 >
-                    <XAxis dataKey='at' tickFormatter={formatXAxis} type='number' domain={['dataMin', 'dataMax']} tickCount={10} />
-                    <YAxis />
+                    <XAxis 
+                        dataKey='at' 
+                        tickFormatter={formatXAxis} 
+                        type='number' 
+                        domain={['dataMin', 'dataMax']} 
+                        tickCount={10} 
+                    />
+                    <YAxis 
+                        type="number" 
+                        domain={['auto', 'auto']} 
+                        label={{ value: 'F', angle: -90, position: 'insideTopLeft' }} 
+                        tickCount={10} 
+                    />
                     <Tooltip content={customTooltip} cursor={{stroke: 'black', strokeWidth: .3}} />
                     { 
                         state.measurements.length && state.measurements.map((metric: any, idx: number) => (
-                            <Line key={idx} data={metric.measurements}  dataKey='value' stroke={colors[idx]} dot={false} activeDot={false} />
+                            <Line 
+                                key={idx} data={metric.measurements} 
+                                dataKey='value' 
+                                stroke={colors[idx]} 
+                                dot={false} 
+                                activeDot={false} 
+                            />
                         )) 
                     }
                 </LineChart>
