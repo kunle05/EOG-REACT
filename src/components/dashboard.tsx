@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
         },
         dropDown: {
-        maxWidth: 500,
+            maxWidth: 500,
         },
     })
 );

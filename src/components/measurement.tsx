@@ -12,14 +12,14 @@ const subscriptionClient = new SubscriptionClient('ws://react.eogresources.com/g
 
 const client = createClient({
     url: 'https://react.eogresources.com/graphql',
-  exchanges: [
-    ...defaultExchanges,
-    subscriptionExchange({
-      forwardSubscription(operation) {
-        return subscriptionClient.request(operation);
-      },
-    }),
-  ],
+    exchanges: [
+        ...defaultExchanges,
+        subscriptionExchange({
+            forwardSubscription(operation) {
+                return subscriptionClient.request(operation);
+            },
+        }),
+    ],
 });
 
 const NEW_MEASUREMENT = `
@@ -33,13 +33,13 @@ const NEW_MEASUREMENT = `
 
 const useStyles = makeStyles({
     root: {
-      minWidth: 255,
-      marginRight: 20,
-      marginBottom: 20,
+        minWidth: 255,
+        marginRight: 20,
+        marginBottom: 20,
     },
     content: {
-      fontSize: '2.5rem',
-      fontWeight: 500,
+        fontSize: '2.5rem',
+        fontWeight: 500,
     },
 });
   
@@ -65,9 +65,9 @@ const handleSubscription = (metrics:any = [], response: any) => {
 
 export default (props: MetricProps) => {
     return (
-      <Provider value={client}>
-        <Measurement values={props.values} />
-      </Provider>
+        <Provider value={client}>
+            <Measurement values={props.values} />
+        </Provider>
     );
 };
 
