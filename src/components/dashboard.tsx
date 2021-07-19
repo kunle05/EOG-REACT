@@ -3,22 +3,30 @@ import { Provider, useQuery } from 'urql';
 import Select from 'react-select';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import { client } from '../Features/Weather/Weather';
 import Chart from './chart';
+import Measurement from './measurement';
 
 const METRICS_QUERY = `
-    query {
+    query METRICS_QUERY {
         getMetrics
     }
 `;
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    dropDown: {
-      margin: theme.spacing(2),
-      maxWidth: 500,
-    },
-  }),
+    createStyles({
+        container: {
+            padding: 30,
+        },
+        root: {
+            flexGrow: 1,
+        },
+        dropDown: {
+        maxWidth: 500,
+        },
+    })
 );
 
 const initialState = {
@@ -31,7 +39,7 @@ export function reducer(state: any, action: any) {
         ...state,
         [action.type]: action.payload
     };
-}
+};
 
 export default () => {
     return (
@@ -47,7 +55,7 @@ const Dashboard = () => {
     const handleChange = (e: any) => dispatch({
         type: 'values',
         payload: e,
-    })
+    });
 
     const [{ fetching, data, error }] = useQuery({ query: METRICS_QUERY });
     useEffect(() => {
@@ -67,23 +75,30 @@ const Dashboard = () => {
         dispatch({
             type: 'metrics',
             payload: options
-        })
-    }, [dispatch, data, error])
+        });
+    }, [dispatch, data, error]);
 
     if (fetching) return <LinearProgress />;
 
     return (
-        <div>
-            <div style={{ width: '75%', margin: 'auto' }}>
-                <Select
-                    isMulti
-                    placeholder='Select metric...'
-                    options={state.metrics}
-                    onChange={handleChange}
-                    className={classes.dropDown}
-                />
+        <Container className={classes.container}>
+            <div className={classes.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={8}>
+                        <Measurement values={state.values} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Select
+                            isMulti
+                            placeholder='Select metric...'
+                            options={state.metrics}
+                            onChange={handleChange}
+                            className={classes.dropDown}
+                        />
+                    </Grid>
+                </Grid>
             </div>
             { state.values.length > 0 && <Chart values={state.values} /> }
-        </div>
+        </Container>
     );
 };
