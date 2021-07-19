@@ -97,7 +97,9 @@ const Chart = (props: MetricProps) => {
             return (
                 <div className={classes.customTooltip}>
                     <p className={classes.label}>{moment(label).format('MMM D YYYY LTS')}</p>
-                    <p className={classes.label}><b>{payload[0].payload.metric}</b>: {payload[0].value}</p>
+                    { payload.map((data: any )=> (
+                        <p key={data.stroke} className={classes.label}><b>{data.payload.metric}</b>: {data.value}</p>
+                    )) }
                 </div>
             )
         };
